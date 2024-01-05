@@ -1,0 +1,62 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
+
+@{
+	var lastestNews = Umbraco.Content(Guid.Parse("f2da2f3c-1aba-440e-8d4b-696921e9b7ed"))
+    .ChildrenOfType("newsArticle")
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate)
+    .Take(3);
+}
+
+<style>
+
+  .image-set {
+    object-fit: cover;
+    width: 100%;
+    height: 200px;
+  }
+
+  .card-body {
+    height: 150px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+</style>
+
+<h2 class="text-center">Latest News</h2>
+<div class="container">
+  <div class="row">
+    @foreach (var item in lastestNews)
+    {
+      var thumbUrl = item.Value<ImageCropperValue>("articleImage").Src;
+      <div class="col-md-4">
+        <div class="card" style="width: 25rem;">
+          <img class="card-img-top image-set" src="@thumbUrl" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">@item.Name</h5>
+            <p class="card-text">@item.Value("leadIn")</p>
+          </div>
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <div><a href="@item.Url()">Read article</a></div>
+            <div class="social-icons text-muted">
+              <a href="https://twitter.com/intent/tweet?text=@item.Value("leadIn")&amp;url=@item.Url(null, UrlMode.Absolute)" class="mx-2">
+              <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://facebook.com/sharer.php?u=@item.Url(null, UrlMode.Absolute)" class="mx-2">
+              <i class="fab fa-facebook"></i>
+              </a>
+              <a href="https://linkedin.com/shareArticle?mini=true&amp;url=@item.Url(null, UrlMode.Absolute)" class="mx-2">
+              <i class="fab fa-linkedin"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

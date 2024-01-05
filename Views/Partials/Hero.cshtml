@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@using Umbraco.Cms.Web.Common.Models;
+@using Umbraco.Extensions;
+
+@{
+    var mediaItem = Model.Value<IPublishedContent>("heroImage");
+    var imageUrl = mediaItem?.Url();
+}
+
+<div class="jumbotron jumbotron-fluid home-hero" style="background-image:url(@imageUrl)">
+  <div class="overlay"></div>
+  <div class="inner">
+    <div class="container">
+      <h1 class="display-4">@Model.Value("headerTitle")</h1>
+      <p class="lead">@Model.Value("heroSubtitle")</p>
+    </div>
+  </div>
+</div>
